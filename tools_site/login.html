@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — Tools Paradise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="aurora-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <a href="index.html" class="auth-logo">Tools <span>Paradise</span></a>
+      <h1>Welcome back</h1>
+      <p class="auth-subtitle">Sign in to your account to continue.</p>
+
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+
+      <button class="auth-btn" id="loginBtn" onclick="handleLogin()">Sign In</button>
+
+      <div id="authMessage" class="auth-message"></div>
+
+      <div class="auth-divider">or</div>
+
+      <div class="auth-switch">
+        Don't have an account? <a href="signup.html">Create one →</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script>
+    const saved = localStorage.getItem('tp-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+
+    const msg = document.getElementById('authMessage');
+    const btn = document.getElementById('loginBtn');
+
+    function showMessage(text, type) {
+      msg.textContent = text;
+      msg.className = 'auth-message ' + type;
+    }
+
+    async function handleLogin() {
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!email || !password) {
+        showMessage('Please enter your email and password.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Signing in…';
+      msg.className = 'auth-message';
+
+      const { data, error } = await tpClient.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        showMessage('❌ ' + error.message, 'error');
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+      } else {
+        showMessage('✓ Signed in! Redirecting…', 'success');
+        setTimeout(() => window.location.href = 'dashboard.html', 900);
+      }
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleLogin();
+    });
+  </script>
+</body>
+</html>

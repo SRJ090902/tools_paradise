@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Tools Paradise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-page">
+  <div class="aurora-container">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <!-- Dash Navbar -->
+  <nav class="dash-navbar">
+    <div class="dash-nav-inner">
+      <a href="index.html" class="brand" style="font-family:var(--font-display);font-size:1.3rem;font-weight:800;letter-spacing:-0.5px;text-decoration:none;color:var(--text);">
+        Tools <span style="color:var(--gold)">Paradise</span>
+      </a>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span id="navEmail" style="font-size:0.8rem;color:var(--text-muted)"></span>
+        <button id="themeToggle" class="icon-btn">☀️</button>
+        <button class="logout-btn" id="logoutBtn" onclick="handleLogout()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Sign out
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="dash-content">
+    <div class="dash-header">
+      <div>
+        <h1>Good <span id="greetTime">day</span>, <span id="greetName" style="background:linear-gradient(135deg,#f5a844,#fcd34d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">there</span> 👋</h1>
+        <p id="dateStr" style="color:var(--text-muted);font-size:0.9rem;margin-top:4px;"></p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="dash-stats">
+      <div class="stat-card">
+        <div class="stat-label">Total Tools</div>
+        <div class="stat-val">9</div>
+        <div class="stat-desc">Available to use</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Favourites</div>
+        <div class="stat-val" id="favCount">0</div>
+        <div class="stat-desc">Saved by you</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Categories</div>
+        <div class="stat-val">4</div>
+        <div class="stat-desc">Productivity · Finance · Creative · Utility</div>
+      </div>
+    </div>
+
+    <!-- All Tools -->
+    <div class="dash-section-title">All Tools</div>
+    <div class="dash-tools-grid">
+      <a href="./tools/21 y/tholman-zenpen-b39f57b/index.html" class="dash-tool-card">
+        <div class="dash-tool-icon">✍️</div>
+        <div class="dash-tool-info"><h4>Zen Pen</h4><p>Distraction-free writing</p></div>
+      </a>
+      <a href="./tools/4 y/index.html" class="dash-tool-card">
+        <div class="dash-tool-icon">💸</div>
+        <div class="dash-tool-info"><h4>Expense Tracker</h4><p>Budget &amp; spending</p></div>
+      </a>
+      <a href="./tools/8 y/index.html" class="dash-tool-card">
+        <div class="dash-tool-icon">🔐</div>
+        <div class="dash-tool-info"><h4>Password Generator</h4><p>Secure passwords</p></div>
+      </a>
+      <a href="./tools/13 y/index.html" class="dash-tool-card">
+        <div class="dash-tool-icon">🎵</div>
+        <div class="dash-tool-info"><h4>Lyrics Search</h4><p>Find song lyrics</p></div>
+      </a>
+      <a href="./tools/15 y/index.html" class="dash-tool-card">
+        <div class="dash-tool-icon">🎨</div>
+        <div class="dash-tool-info"><h4>Drawing Board</h4><p>Sketch in browser</p></div>
+      </a>
+      <a href="./tools/16 y/index.html" class="dash-tool-card">
+        <div class="dash-tool-icon">📍</div>
+        <div class="dash-tool-info"><h4>Location Finder</h4><p>Find any place</p></div>
+      </a>
+      <a href="./tools/18 y/index.html" class="dash-tool-card">
+        <div class="dash-tool-icon">😂</div>
+        <div class="dash-tool-info"><h4>Meme Generator</h4><p>Create memes instantly</p></div>
+      </a>
+      <a href="./tools/19 y/renzhezhilu-webp2jpg-online-4949141/index.html" class="dash-tool-card">
+        <div class="dash-tool-icon">🖼️</div>
+        <div class="dash-tool-info"><h4>Image Editor</h4><p>Edit &amp; convert images</p></div>
+      </a>
+      <a href="./tools/11 y/index.html" class="dash-tool-card">
+        <div class="dash-tool-icon">📊</div>
+        <div class="dash-tool-info"><h4>Customer Feedback</h4><p>Measure satisfaction</p></div>
+      </a>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js"></script>
+  <script>
+    // Theme
+    const savedTheme = localStorage.getItem('tp-theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    const themeBtn = document.getElementById('themeToggle');
+    themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    themeBtn.addEventListener('click', () => {
+      const cur  = document.documentElement.getAttribute('data-theme');
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('tp-theme', next);
+      themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Auth guard + personalisation
+    (async () => {
+      const { data: { user } } = await tpClient.auth.getUser();
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      document.getElementById('navEmail').textContent = user.email;
+
+      const name = user.email.split('@')[0];
+      document.getElementById('greetName').textContent =
+        name.charAt(0).toUpperCase() + name.slice(1);
+
+      const h = new Date().getHours();
+      document.getElementById('greetTime').textContent =
+        h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+
+      document.getElementById('dateStr').textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      });
+    })();
+
+    // Fav count from localStorage
+    let favs = 0;
+    for (let i = 0; i < 9; i++) {
+      if (localStorage.getItem(`tp-fav-${i}`) === '1') favs++;
+    }
+    document.getElementById('favCount').textContent = favs;
+
+    async function handleLogout() {
+      await tpClient.auth.signOut();
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>
