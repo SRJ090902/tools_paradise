@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Supabase Test - Clean Version</title>
+</head>
+
+<body>
+  <h2>Signup Test</h2>
+
+  <input type="email" id="email" placeholder="Enter email"><br><br>
+  <input type="password" id="password" placeholder="Enter password"><br><br>
+
+  <button onclick="handleSignup()">Sign Up</button>
+  <button onclick="handleLogin()">Log In</button>
+
+  <p id="status"></p>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    // Use a unique name to avoid conflicts
+    const mySupabaseClient = window.supabase.createClient(
+      "https://qrqwahgljhimmgqsaiil.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFycXdhaGdsamhpbW1ncXNhaWlsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2MTI4OTQsImV4cCI6MjA5MTE4ODg5NH0.8tTdHKnEDOmOmpcHUcypK6McrNPEbyUSfoCR_klrll4"
+    )
+
+    async function handleSignup() {
+      const email = document.getElementById("email").value
+      const password = document.getElementById("password").value
+
+      if (!email || !password) {
+        alert("Please enter both email and password")
+        return
+      }
+
+      const { data, error } = await mySupabaseClient.auth.signUp({
+        email,
+        password
+      })
+
+      if (error) {
+        document.getElementById("status").innerHTML = `❌ Error: ${error.message}`
+        console.error("Signup error:", error)
+      } else {
+        if (data.user?.identities?.length === 0) {
+          document.getElementById("status").innerHTML = "⚠️ User already exists"
+        } else {
+          document.getElementById("status").innerHTML = "✅ Signup successful! Check your email."
+          console.log("Success:", data)
+        }
+      }
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById("email").value
+      const password = document.getElementById("password").value
+
+      if (!email || !password) {
+        alert("Please enter both email and password")
+        return
+      }
+
+      const { data, error } = await mySupabaseClient.auth.signInWithPassword({
+        email,
+        password
+      })
+
+      if (error) {
+        document.getElementById("status").innerHTML = `❌ Login failed: ${error.message}`
+      } else {
+        document.getElementById("status").innerHTML = `✅ Logged in as ${data.user.email}`
+      }
+    }
+  </script>
+</body>
+</html>
